@@ -5,6 +5,7 @@ import { Place } from '../place.model';
 import { PlacesComponent } from '../places.component';
 import { PlacesContainerComponent } from '../places-container/places-container.component';
 import { catchError, map, throwError } from 'rxjs';
+import { PlacesService } from '../places.service';
 
 
 @Component({
@@ -24,10 +25,12 @@ export class AvailablePlacesComponent implements OnInit {
 // Alternative method of connecting to the HttpClient.
 // constructor(private httpClient: HttpClient) {}
 
+  constructor(private placesService: PlacesService) {}
+
   ngOnInit() {
     this.isFetching.set(true);
     const subscription = this.httpClient
-      .get<{places: Place[]}>('https://congenial-goldfish-gjxqgxwq46jcwr5q-3000.app.github.dev/places', {
+      .get<{places: Place[]}>(this.placesService.hostUrl, {
         //observe: 'response', //Angular will trigger the full response object.
         //observe: 'events' // Another supported setting that will trigger for different events that occur doing the req/res lifecycle.
       })
@@ -60,6 +63,14 @@ export class AvailablePlacesComponent implements OnInit {
 
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
+    });
+  }
+
+  onSelectPlace(selectedPlace: Place) {
+    this.httpClient.put(this.placesService.hostUrl, {
+      placeId: selectedPlace.id
+    }).subscribe({
+      next: (resData) => console.log(resData),
     });
   }
 }

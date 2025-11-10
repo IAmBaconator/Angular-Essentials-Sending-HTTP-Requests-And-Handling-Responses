@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 
 import { Place } from './place.model';
+import { PlacesService } from './places.service';
 
 @Component({
   selector: 'app-places',
@@ -13,6 +14,9 @@ export class PlacesComponent {
   places = input.required<Place[]>();
   selectPlace = output<Place>();
 
+  constructor(private placesService: PlacesService) {}
+  hostUrl = this.placesService.hostUrl;
+  
   onSelectPlace(place: Place) {
     this.selectPlace.emit(place);
   }
