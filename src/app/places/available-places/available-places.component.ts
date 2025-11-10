@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Place } from '../place.model';
 import { PlacesComponent } from '../places.component';
 import { PlacesContainerComponent } from '../places-container/places-container.component';
+import { map } from 'rxjs';
 
 
 @Component({
@@ -27,11 +28,15 @@ export class AvailablePlacesComponent implements OnInit {
         //observe: 'response', //Angular will trigger the full response object.
         //observe: 'events' // Another supported setting that will trigger for different events that occur doing the req/res lifecycle.
       })
+      .pipe(
+        map((resData) => resData.places) // Not necessary, but for demo purposes.
+      )
       .subscribe({
-        next: (resData) => {
+        next: (places) => {
           //console.log('httpClient Connected!');
           //console.log(event);
-          console.log(resData.places); // Modify the response to reflect the added observ parameter above and add a "?" to support undefined inititally.
+          //console.log(resData.places); // Modify the response to reflect the added observ parameer above and add a "?" to support undefined inititally.
+          this.places.set(places);
         },
     });
 
