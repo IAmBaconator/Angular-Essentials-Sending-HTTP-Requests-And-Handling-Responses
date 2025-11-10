@@ -25,13 +25,13 @@ export class AvailablePlacesComponent implements OnInit {
     const subscription = this.httpClient
       .get<{places: Place[]}>('https://congenial-goldfish-gjxqgxwq46jcwr5q-3000.app.github.dev/places', {
         //observe: 'response', //Angular will trigger the full response object.
-        observe: 'events' // Another supported setting that will trigger for different events that occur doing the req/res lifecycle.
+        //observe: 'events' // Another supported setting that will trigger for different events that occur doing the req/res lifecycle.
       })
       .subscribe({
-        next: (event) => {
+        next: (resData) => {
           //console.log('httpClient Connected!');
-          console.log(event);
-          //console.log(response.body?.places); // Modify the response to reflect the added observ parameter above and add a "?" to support undefined inititally.
+          //console.log(event);
+          console.log(resData.places); // Modify the response to reflect the added observ parameter above and add a "?" to support undefined inititally.
         },
     });
 
