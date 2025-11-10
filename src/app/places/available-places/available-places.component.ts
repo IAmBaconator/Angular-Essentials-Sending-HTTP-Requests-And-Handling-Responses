@@ -16,6 +16,7 @@ import { map } from 'rxjs';
 })
 export class AvailablePlacesComponent implements OnInit {
   places = signal<Place[] | undefined>(undefined);
+  isFetching = signal(false);
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef); // Even thought the HttpClient requests tend to only return one request, it's good practise to include the DestryRef clean up the HttpClient subscripition.
 
@@ -23,6 +24,7 @@ export class AvailablePlacesComponent implements OnInit {
 // constructor(private httpClient: HttpClient) {}
 
   ngOnInit() {
+    this.isFetching.set(true);
     const subscription = this.httpClient
       .get<{places: Place[]}>('https://congenial-goldfish-gjxqgxwq46jcwr5q-3000.app.github.dev/places', {
         //observe: 'response', //Angular will trigger the full response object.
@@ -38,6 +40,9 @@ export class AvailablePlacesComponent implements OnInit {
           //console.log(resData.places); // Modify the response to reflect the added observ parameer above and add a "?" to support undefined inititally.
           this.places.set(places);
         },
+        complete: () => { // Safest route to use in case multiple requets need to complete before this is set.
+          this.isFetching.set(false);
+        }
     });
 
     this.destroyRef.onDestroy(() => {
