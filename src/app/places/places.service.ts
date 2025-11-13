@@ -32,11 +32,20 @@ export class PlacesService {
   }
 
   addPlaceToUserPlaces(place: Place) {
-    this.userPlaces.update(prevPlaces => [...prevPlaces, place]);
+    const prevPlaces = this.userPlaces();//doesn't setup a subscription, just reads the value.
+
+    if (prevPlaces.some((p) => p.id === place.id)) {//to check and ensure we do not have duplicate places added to our favorites.
+      this.userPlaces.update(prevPlaces => [...prevPlaces, place]);
+    }
     
     return this.httpClient.put(this.hostUrl + 'user-places', {
       placeId: place.id,
-    });
+    }).pipe(
+      catchError(error => {
+        this.userPlaces.set(prevPlaces);//roll-back if an error takes place between the front/backend.
+        return throwError(() => new Error('Failed to store selected place.'))
+      })
+    );
   }
 
   removeUserPlace(place: Place) {}
