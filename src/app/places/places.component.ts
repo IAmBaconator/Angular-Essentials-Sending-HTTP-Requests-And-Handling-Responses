@@ -17,6 +17,7 @@ export class PlacesComponent {
   constructor(private placesService: PlacesService) {}
   hostUrl = this.placesService.hostUrl;
   
+  
   onSelectPlace(place: Place) {
     this.selectPlace.emit(place);
   }

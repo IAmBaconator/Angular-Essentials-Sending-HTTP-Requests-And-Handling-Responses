@@ -26,14 +26,15 @@ export class AvailablePlacesComponent implements OnInit {
 // constructor(private httpClient: HttpClient) {}
 
   constructor(private placesService: PlacesService) {}
-
+ 
   ngOnInit() {
     this.isFetching.set(true);
     const subscription = this.httpClient
-      .get<{places: Place[]}>(this.placesService.hostUrl, {
+      .get<{places: Place[]}>(this.placesService.hostUrl + 'places'//, {
         //observe: 'response', //Angular will trigger the full response object.
         //observe: 'events' // Another supported setting that will trigger for different events that occur doing the req/res lifecycle.
-      })
+      //}
+      )
       .pipe(
         map((resData) => resData.places),
         catchError((error) => {

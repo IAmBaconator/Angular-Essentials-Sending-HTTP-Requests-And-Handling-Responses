@@ -7,7 +7,7 @@ import { Place } from './place.model';
 })
 export class PlacesService {
   private userPlaces = signal<Place[]>([]);
-  public hostUrl: string = 'https://automatic-fiesta-9r69p649qjg2x44q.github.dev/'; // Custom URL override of (http://localhost:3000/) for codespace that will need to be updated every time new npm start occurs.
+  public hostUrl: string = 'http://automatic-fiesta-9r69p649qjg2x44q.github.dev/'; // Custom URL override of (http://localhost:3000/) for codespace that will need to be updated every time new npm start occurs.
 
   loadedUserPlaces = this.userPlaces.asReadonly();
 
